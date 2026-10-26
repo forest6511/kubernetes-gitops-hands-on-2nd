@@ -1,0 +1,6 @@
+$ kubectl get pods -n todo-dev
+No resources found in todo-dev namespace.
+$ kubectl delete namespace todo-dev todo-staging todo-prod
+namespace "todo-dev" deleted
+namespace "todo-staging" deleted
+namespace "todo-prod" deleted

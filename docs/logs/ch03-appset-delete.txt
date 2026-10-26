@@ -1,0 +1,9 @@
+$ kubectl delete applicationset todo-app-envs -n argocd
+applicationset.argoproj.io "todo-app-envs" deleted from argocd namespace
+$ kubectl get applications -n argocd
+NAME               SYNC STATUS   HEALTH STATUS
+sealed-secrets     Synced        Healthy
+todo-app           Synced        Healthy
+todo-app-dev       OutOfSync     Progressing
+todo-app-prod      OutOfSync     Progressing
+todo-app-staging   OutOfSync     Progressing

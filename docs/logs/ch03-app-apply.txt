@@ -1,0 +1,2 @@
+$ kubectl apply -f argocd/todo-app.yaml
+application.argoproj.io/todo-app created
