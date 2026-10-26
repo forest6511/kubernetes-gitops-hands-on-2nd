@@ -1,0 +1,4 @@
+AmazonSSMManagedInstanceCore
+AmazonEKS_CNI_Policy
+AmazonEKSWorkerNodePolicy
+AmazonEC2ContainerRegistryPullOnly

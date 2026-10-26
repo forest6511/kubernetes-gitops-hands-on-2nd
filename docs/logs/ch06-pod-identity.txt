@@ -1,0 +1,3 @@
+kube-system	ebs-csi-controller-sa
+kube-system	aws-node
+kube-system	aws-load-balancer-controller

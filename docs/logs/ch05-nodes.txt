@@ -1,6 +1,7 @@
 $ kubectl wait --for=condition=Ready nodes --all
-node/ip-192-168-136-205.ap-northeast-1.compute.internal condition met
-node/ip-192-168-170-124.ap-northeast-1.compute.internal condition met
+node/ip-192-168-149-87.ap-northeast-1.compute.internal condition met
+node/ip-192-168-190-74.ap-northeast-1.compute.internal condition met
+$ kubectl get nodes -o custom-columns=ZONE:...,VERSION:...
 ZONE              VERSION
-ap-northeast-1a   v1.35.9-eks-39aca56
 ap-northeast-1c   v1.35.9-eks-39aca56
+ap-northeast-1d   v1.35.9-eks-39aca56

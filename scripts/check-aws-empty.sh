@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# 第5〜7章: 本書のクラスター（todo-eks）の課金リソースが残っていないかを確かめる。
-# 残っていれば一覧を表示して exit 1。AWS_PROFILE と AWS_REGION を設定してから実行する
+# 第5〜7章: 本書のクラスター（todo-eks）の課金リソースが残って
+# いないかを確かめる。残っていれば一覧を表示して exit 1。
+# AWS_PROFILE と AWS_REGION を設定してから実行する
 set -u
 CLUSTER=${CLUSTER:-todo-eks}
 TAG=Name=tag:alpha.eksctl.io/cluster-name,Values=$CLUSTER

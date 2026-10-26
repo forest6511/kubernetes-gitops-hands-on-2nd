@@ -1,11 +1,13 @@
 # 第7章: todo-app の中を読むだけの権限を、ServiceAccount viewer に渡す
-# #region rbac
+# #region sa
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: viewer
   namespace: todo-app
+# #endregion sa
 ---
+# #region role
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -19,7 +21,9 @@ rules:
   - apiGroups: ["apps"]
     resources: ["deployments"]
     verbs: ["get", "list", "watch"]
+# #endregion role
 ---
+# #region binding
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
@@ -33,4 +37,4 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: todo-viewer
-# #endregion rbac
+# #endregion binding

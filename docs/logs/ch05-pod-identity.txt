@@ -1,3 +1,2 @@
-$ aws eks list-pod-identity-associations --cluster-name todo-eks ...
 kube-system	ebs-csi-controller-sa
 kube-system	aws-node

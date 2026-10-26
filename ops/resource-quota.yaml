@@ -1,4 +1,5 @@
-# 第7章: todo-app の Namespace 全体で使える量の上限と、コンテナごとの既定値
+# 第7章: todo-app の Namespace 全体で使える量の上限と、
+# コンテナごとの既定値
 # #region quota
 apiVersion: v1
 kind: ResourceQuota

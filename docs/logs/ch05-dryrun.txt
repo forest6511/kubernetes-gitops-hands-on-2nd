@@ -1,0 +1,7 @@
+$ eksctl create cluster -f eks/cluster-config.yaml --dry-run \
+    | grep -E 'amiFamily|gateway:|instanceType|privateNetworking|volumeType'
+- amiFamily: AmazonLinux2023
+  instanceType: t3.medium
+  privateNetworking: true
+  volumeType: gp3
+    gateway: Single

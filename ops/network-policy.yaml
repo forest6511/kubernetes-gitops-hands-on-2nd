@@ -1,4 +1,5 @@
-# 第7章: todo-app の Pod への受信を、必要な経路だけに絞る（送信は絞らない）
+# 第7章: todo-app の Pod への受信を、必要な経路だけに絞る
+# （送信は絞らない）
 # #region deny
 # まず、todo-app のすべての Pod への受信を止める
 apiVersion: networking.k8s.io/v1
@@ -13,8 +14,9 @@ spec:
 # #endregion deny
 ---
 # #region frontend
-# ALB → 画面。ALB はパブリックサブネットに置かれるので、その CIDR だけを許す
-# （自分のクラスターの値を aws ec2 describe-subnets で確かめて書き換える）
+# ALB → 画面。ALB はパブリックサブネットに置かれるので、
+# その CIDR だけを許す（自分のクラスターの値を
+# aws ec2 describe-subnets で確かめて書き換える）
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -26,15 +28,16 @@ spec:
       app: todo-frontend
   ingress:
     - from:
-        - ipBlock: { cidr: 192.168.0.0/19 }
-        - ipBlock: { cidr: 192.168.32.0/19 }
-        - ipBlock: { cidr: 192.168.64.0/19 }
+        - ipBlock: {cidr: 192.168.0.0/19}
+        - ipBlock: {cidr: 192.168.32.0/19}
+        - ipBlock: {cidr: 192.168.64.0/19}
       ports:
         - port: 8080
 # #endregion frontend
 ---
 # #region api
-# ALB → API（/api は ALB から直接届く）と、Prometheus → API（/metrics の収集）
+# ALB → API（/api は ALB から直接届く）と、
+# Prometheus → API（/metrics の収集）
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -46,9 +49,9 @@ spec:
       app: todo-api
   ingress:
     - from:
-        - ipBlock: { cidr: 192.168.0.0/19 }
-        - ipBlock: { cidr: 192.168.32.0/19 }
-        - ipBlock: { cidr: 192.168.64.0/19 }
+        - ipBlock: {cidr: 192.168.0.0/19}
+        - ipBlock: {cidr: 192.168.32.0/19}
+        - ipBlock: {cidr: 192.168.64.0/19}
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: monitoring
