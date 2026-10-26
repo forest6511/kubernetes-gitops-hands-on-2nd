@@ -34,8 +34,15 @@ ARGOCD=https://raw.githubusercontent.com/argoproj/argo-cd/v3.5.6
 ALB_QUERY="LoadBalancers[?starts_with(LoadBalancerName,'k8s-todoapp')]"
 # クラスターの削除の途中で止めた後（ACTIVE でない・もう無い）なら、
 # 6段目だけを行う
-STATUS=$(aws eks describe-cluster --name "$CLUSTER" \
-  --query cluster.status --output text 2> /dev/null || echo NONE)
+# 「クラスターが無い」以外の照会の失敗（認証切れなど）では止まる
+if ! STATUS=$(aws eks describe-cluster --name "$CLUSTER" \
+  --query cluster.status --output text 2>&1); then
+  if [[ $STATUS != *ResourceNotFoundException* ]]; then
+    echo "$STATUS" >&2
+    exit 1
+  fi
+  STATUS=NONE
+fi
 if [ "$STATUS" != ACTIVE ]; then
   echo "クラスターの状態が $STATUS なので、6段目だけを行う"
   if [ "$STATUS" != NONE ]; then
