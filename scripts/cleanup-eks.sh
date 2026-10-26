@@ -32,9 +32,9 @@ has() {
 }
 ARGOCD=https://raw.githubusercontent.com/argoproj/argo-cd/v3.5.6
 ALB_QUERY="LoadBalancers[?starts_with(LoadBalancerName,'k8s-todoapp')]"
-# クラスターの削除の途中で止めた後（ACTIVE でない・もう無い）なら、
-# 6段目だけを行う
-# 「クラスターが無い」以外の照会の失敗（認証切れなど）では止まる
+# クラスターの状態で分ける。ACTIVE は1段目から、DELETING（削除の途中）
+# は6段目から、無ければ残りの確認だけ。それ以外（作成中・更新中など）は
+# 止まる。「無い」以外の照会の失敗（認証切れなど）でも止まる
 if ! STATUS=$(aws eks describe-cluster --name "$CLUSTER" \
   --query cluster.status --output text 2>&1); then
   if [[ $STATUS != *ResourceNotFoundException* ]]; then
@@ -43,24 +43,31 @@ if ! STATUS=$(aws eks describe-cluster --name "$CLUSTER" \
   fi
   STATUS=NONE
 fi
-if [ "$STATUS" != ACTIVE ]; then
-  echo "クラスターの状態が $STATUS なので、6段目だけを行う"
-  if [ "$STATUS" != NONE ]; then
-    eksctl delete cluster --name "$CLUSTER" --wait
-  fi
-  bash scripts/check-aws-empty.sh
-  exit $?
-fi
-# minikube を向いたまま流すと、minikube の Application や DB を消す
-# （eksctl delete cluster は最初に kubeconfig から $CLUSTER を消す。
-#   その後に止めた場合は、作り直してから流し直す）
-if ! kubectl config current-context | grep -q "$CLUSTER"; then
+case $STATUS in
+  ACTIVE) ;;
+  DELETING | NONE)
+    echo "クラスターの状態が $STATUS なので、6段目だけを行う"
+    if [ "$STATUS" = DELETING ]; then
+      eksctl delete cluster --name "$CLUSTER" --wait
+    fi
+    bash scripts/check-aws-empty.sh
+    exit $? ;;
+  *)
+    echo "クラスターの状態が $STATUS です。ACTIVE になってから流す" >&2
+    exit 1 ;;
+esac
+# kubectl の接続先が、このクラスターの API の URL と同じかを確かめる
+# （minikube や別のクラスターを向いたまま流すと、そちらを消す）。
+# eksctl delete cluster は最初に kubeconfig から $CLUSTER を消すので、
+# その後に止めた場合は作り直してから流し直す
+ENDPOINT=$(aws eks describe-cluster --name "$CLUSTER" \
+  --query cluster.endpoint --output text)
+SERVER=$(kubectl config view --minify \
+  -o jsonpath='{.clusters[0].cluster.server}' 2> /dev/null || true)
+if [ "$SERVER" != "$ENDPOINT" ]; then
   echo "kubectl の接続先が $CLUSTER ではありません" >&2
-  if ! kubectl config get-contexts -o name | grep -q "$CLUSTER"
-  then
-    msg="aws eks update-kubeconfig --name $CLUSTER で作り直してから、"
-    echo "${msg}もう一度流してください" >&2
-  fi
+  msg="aws eks update-kubeconfig --name $CLUSTER で接続先を作り直して"
+  echo "${msg}から、もう一度流してください" >&2
   exit 1
 fi
 # #region steps-1
