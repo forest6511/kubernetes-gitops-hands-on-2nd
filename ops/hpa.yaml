@@ -22,6 +22,6 @@ spec:
           averageUtilization: 50
   behavior:
     scaleDown:
-      # 負荷が下がってから減らすまで待つ時間（既定は 300 秒）
+      # 減らすときに、過去何秒の望む数を見るか（既定は 300 秒）
       stabilizationWindowSeconds: 60
 # #endregion hpa
