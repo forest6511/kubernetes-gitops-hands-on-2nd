@@ -1,0 +1,6 @@
+NAME                             READY   STATUS    RESTARTS   AGE
+todo-api-64646f844c-bclbj        1/1     Running   0          40m
+todo-api-64646f844c-mrxh5        1/1     Running   0          40m
+todo-db-687bdcbdb6-lt9bl         1/1     Running   0          32m
+todo-frontend-7d6b8f44bc-hff2l   1/1     Running   0          40m
+todo-frontend-7d6b8f44bc-s625w   1/1     Running   0          40m

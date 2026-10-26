@@ -79,7 +79,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum(rate(todo_api_requests_total{status=~\"5..\"}[5m])) / sum(rate(todo_api_requests_total[5m]))",
+          "expr": "(sum(rate(todo_api_requests_total{status=~\"5..\"}[5m])) or vector(0))\n  / sum(rate(todo_api_requests_total[5m]))",
           "legendFormat": "5xx",
           "datasource": {
             "type": "prometheus",

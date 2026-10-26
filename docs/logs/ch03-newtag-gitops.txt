@@ -1,0 +1,9 @@
+# push から 119 秒後
+NAME       SYNC STATUS   HEALTH STATUS
+todo-app   Synced        Progressing
+Waiting for deployment "todo-frontend" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "todo-frontend" rollout to finish: 1 old replicas are pending termination...
+deployment "todo-frontend" successfully rolled out
+123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/todo-frontend:f958bf4833959eb0098177ebc5bd1d0b9315384f
+# 古い Pod が終わってから（5 秒後）
+  <h1>Todo App (GitOps)</h1>

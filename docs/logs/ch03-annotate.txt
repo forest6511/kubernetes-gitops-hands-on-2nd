@@ -1,0 +1,2 @@
+$ kubectl annotate secret todo-db-secret -n todo-app sealedsecrets.bitnami.com/managed=true
+secret/todo-db-secret annotated

@@ -1,0 +1,11 @@
+$ kubectl get servicemonitor,prometheusrule,configmap -n todo-app
+NAME                                            AGE
+servicemonitor.monitoring.coreos.com/todo-api   2s
+
+NAME                                            AGE
+prometheusrule.monitoring.coreos.com/todo-api   3s
+
+NAME                           DATA   AGE
+configmap/kube-root-ca.crt     1      139m
+configmap/todo-app-dashboard   1      3s
+configmap/todo-db-config       1      139m

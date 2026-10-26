@@ -1,0 +1,1 @@
+wrote manifests/components/secret-sealed/sealedsecret.yaml

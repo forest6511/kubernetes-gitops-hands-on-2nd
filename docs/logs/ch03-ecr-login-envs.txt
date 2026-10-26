@@ -1,0 +1,9 @@
+$ bash scripts/ecr-login-minikube.sh todo-dev
+namespace/todo-dev created
+secret/ecr-login created
+$ bash scripts/ecr-login-minikube.sh todo-staging
+namespace/todo-staging created
+secret/ecr-login created
+$ bash scripts/ecr-login-minikube.sh todo-prod
+namespace/todo-prod created
+secret/ecr-login created
