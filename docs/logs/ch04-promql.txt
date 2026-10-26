@@ -1,9 +1,20 @@
+# scripts/send-requests.sh を 330 回流した直後（アラートの練習の後なので 5xx の系列があり、割合は 0）
 $ PromQL: sum by (path) (rate(todo_api_requests_total[5m]))
-  {'path': '/api/todos/{id}'} => 0.428
-  {'path': '/api/todos'} => 0.4172
+  {'path': '/api/todos/{id}'} => 1.3229
+  {'path': '/api/todos'} => 1.3194
 
 $ PromQL: sum(rate(todo_api_requests_total{status=~"5.."}[5m])) / sum(rate(todo_api_requests_total[5m]))
+  {} => 0.0
+
+$ PromQL: (sum(rate(todo_api_requests_total{status=~"5.."}[5m])) or vector(0)) / sum(rate(todo_api_requests_total[5m]))
+  {} => 0.0
 
 $ PromQL: histogram_quantile(0.95, sum by (le) (rate(todo_api_request_duration_seconds_bucket[5m])))
-  {} => 0.0277
+  {} => 0.0987
+
+$ PromQL: sum by (method) (rate(todo_api_requests_total[5m]))
+  {'method': 'DELETE'} => 0.6597
+  {'method': 'GET'} => 0.6597
+  {'method': 'PUT'} => 0.6632
+  {'method': 'POST'} => 0.6597
 
