@@ -1,0 +1,54 @@
+# 第5章: eksctl で作る EKS クラスターの定義
+# #region metadata
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: todo-eks
+  region: ap-northeast-1
+  # 標準サポート中の版（延長サポートになるとクラスターの料金が上がる）
+  version: "1.35"
+# 今後の eksctl で既定になる Auto Mode を使わず、ノードグループを自分で持つ
+autoModeConfig:
+  enabled: false
+vpc:
+  nat:
+    # NAT Gateway は1つだけ（学習用。本番では AZ ごとに置く）
+    gateway: Single
+# #endregion metadata
+# #region nodegroup
+managedNodeGroups:
+  - name: workers
+    instanceType: t3.medium
+    desiredCapacity: 2
+    minSize: 2
+    maxSize: 3
+    volumeSize: 20
+    # ノードはプライベートサブネットに置き、外から直接届かないようにする
+    privateNetworking: true
+    labels:
+      role: worker
+# #endregion nodegroup
+# #region addons
+addons:
+  - name: vpc-cni
+    # 第7章の NetworkPolicy を vpc-cni で効かせる
+    configurationValues: '{"enableNetworkPolicy": "true"}'
+    # Pod の IP を割り当てる権限を、Pod Identity で渡す
+    podIdentityAssociations:
+      - serviceAccountName: aws-node
+        namespace: kube-system
+        permissionPolicyARNs:
+          - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+  - name: coredns
+  - name: kube-proxy
+  - name: eks-pod-identity-agent
+  # 第7章の HPA が CPU の使用量を読む
+  - name: metrics-server
+  - name: aws-ebs-csi-driver
+    # EBS を作る権限を、Pod Identity で controller だけに渡す
+    podIdentityAssociations:
+      - serviceAccountName: ebs-csi-controller-sa
+        namespace: kube-system
+        permissionPolicyARNs:
+          - arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy
+# #endregion addons
