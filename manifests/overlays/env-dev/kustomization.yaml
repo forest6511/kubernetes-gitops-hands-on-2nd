@@ -1,0 +1,22 @@
+# 第3章の ApplicationSet の入口（dev）: Namespace を todo-dev にし、
+# レプリカ数を変える。Gateway は使わないので HTTPRoute を外す
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: todo-dev
+resources:
+  - ../../base
+components:
+  - ../../components/secret-plain
+replicas:
+  - name: todo-api
+    count: 1
+  - name: todo-frontend
+    count: 1
+patches:
+  - patch: |-
+      $patch: delete
+      apiVersion: gateway.networking.k8s.io/v1
+      kind: HTTPRoute
+      metadata:
+        name: todo-routes
+        namespace: todo-app

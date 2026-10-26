@@ -1,0 +1,27 @@
+# 第3章: Todo アプリを Git から同期する Application。
+# repoURL の YOUR_GITHUB_USER を自分の GitHub のユーザー名に書き換える
+# #region app
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: todo-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: >-
+      https://github.com/YOUR_GITHUB_USER/kubernetes-gitops-hands-on-2nd.git
+    targetRevision: main
+    # 第3章の途中で ch03-minikube-sealed、第4章で
+    # ch04-minikube-monitored に変える
+    path: manifests/overlays/ch01-minikube
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: todo-app
+  syncPolicy:
+    automated:
+      # Git から消したリソースはクラスターからも消す
+      prune: true
+      # クラスターを手で変えたら Git の状態に戻す
+      selfHeal: true
+# #endregion app

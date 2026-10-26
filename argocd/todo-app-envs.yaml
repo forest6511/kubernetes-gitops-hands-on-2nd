@@ -1,0 +1,35 @@
+# 第3章: 1つの定義から dev・staging・prod の3つの Application を作る
+# repoURL の YOUR_GITHUB_USER を自分の GitHub のユーザー名に書き換える
+# #region appset
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: todo-app-envs
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - list:
+        elements:
+          - env: dev
+          - env: staging
+          - env: prod
+  template:
+    metadata:
+      name: "todo-app-{{.env}}"
+    spec:
+      project: default
+      source:
+        repoURL: >-
+          https://github.com/YOUR_GITHUB_USER/kubernetes-gitops-hands-on-2nd.git
+        targetRevision: main
+        path: "manifests/overlays/env-{{.env}}"
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "todo-{{.env}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+# #endregion appset
