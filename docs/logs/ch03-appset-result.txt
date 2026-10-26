@@ -1,0 +1,25 @@
+$ kubectl get applications -n argocd
+NAME               SYNC STATUS   HEALTH STATUS
+sealed-secrets     Synced        Healthy
+todo-app           Synced        Healthy
+todo-app-dev       Synced        Healthy
+todo-app-prod      Synced        Healthy
+todo-app-staging   Synced        Healthy
+
+$ kubectl get pods -n todo-dev
+NAME                             READY   STATUS    RESTARTS   AGE
+todo-api-6754b56f7d-wz7n7        1/1     Running   0          83s
+todo-db-687bdcbdb6-gwbb5         1/1     Running   0          83s
+todo-frontend-75dfb45f8d-kbgdg   1/1     Running   0          83s
+$ kubectl get pods -n todo-staging
+NAME                             READY   STATUS    RESTARTS   AGE
+todo-api-6754b56f7d-v64sr        1/1     Running   0          84s
+todo-db-687bdcbdb6-t2dpp         1/1     Running   0          84s
+todo-frontend-75dfb45f8d-ph4zr   1/1     Running   0          84s
+$ kubectl get pods -n todo-prod
+NAME                             READY   STATUS    RESTARTS   AGE
+todo-api-6754b56f7d-bvl74        1/1     Running   0          84s
+todo-api-6754b56f7d-jnrw4        1/1     Running   0          84s
+todo-db-687bdcbdb6-hz5rl         1/1     Running   0          84s
+todo-frontend-75dfb45f8d-bdzgg   1/1     Running   0          84s
+todo-frontend-75dfb45f8d-qnnv5   1/1     Running   0          84s

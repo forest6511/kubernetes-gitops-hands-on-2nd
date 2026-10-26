@@ -1,0 +1,15 @@
+$ kubectl get sealedsecret -n todo-app
+NAME             STATUS   SYNCED   AGE
+todo-db-secret            True     22s
+
+$ kubectl get secret todo-db-secret -n todo-app -o jsonpath=...ownerReferences
+SealedSecret/todo-db-secret
+
+$ kubectl get pods -n todo-app
+NAME                             READY   STATUS    RESTARTS   AGE
+todo-api-7979f7cfd8-7pj8c        1/1     Running   0          67s
+todo-api-7979f7cfd8-fnxtm        1/1     Running   0          63s
+todo-api-7979f7cfd8-vgrf9        1/1     Running   0          65s
+todo-db-687bdcbdb6-lt9bl         1/1     Running   0          42m
+todo-frontend-75dfb45f8d-kjk6c   1/1     Running   0          67s
+todo-frontend-75dfb45f8d-nj84z   1/1     Running   0          65s

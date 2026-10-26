@@ -1,0 +1,17 @@
+$ kubectl patch application todo-app -n argocd --type merge -p '{"spec":{"syncPolicy":{"automated":null}}}'
+application.argoproj.io/todo-app patched
+$ kubectl scale deployment todo-db -n todo-app --replicas=0
+deployment.apps/todo-db scaled
+TodoApiHighErrorRate firing 2026-10-26T06:14:24.497083431Z 1e+00
+
+# 自動同期を戻す（argocd/todo-app.yaml を適用し直す）
+application.argoproj.io/todo-app configured
+# DB が戻るまで 4 秒
+# アラートが消えるまで 106 秒（状態: なし）
+NAME                             READY   STATUS    RESTARTS   AGE
+todo-api-7979f7cfd8-msnll        1/1     Running   0          10m
+todo-api-7979f7cfd8-vgrf9        1/1     Running   0          21m
+todo-api-7979f7cfd8-xkkts        1/1     Running   0          10m
+todo-db-687bdcbdb6-qc9l2         1/1     Running   0          105s
+todo-frontend-75dfb45f8d-kjk6c   1/1     Running   0          21m
+todo-frontend-75dfb45f8d-nj84z   1/1     Running   0          21m

@@ -1,0 +1,7 @@
+NAME                                                    READY   STATUS    RESTARTS   AGE
+alertmanager-kps-kube-prometheus-stack-alertmanager-0   2/2     Running   0          67s
+kps-grafana-5f4f67769d-26582                            3/3     Running   0          86s
+kps-kube-prometheus-stack-operator-995cd6855-xqxgq      1/1     Running   0          86s
+kps-kube-state-metrics-747b7b996-s9gfk                  1/1     Running   0          86s
+kps-prometheus-node-exporter-gbtf8                      1/1     Running   0          86s
+prometheus-kps-kube-prometheus-stack-prometheus-0       2/2     Running   0          66s
