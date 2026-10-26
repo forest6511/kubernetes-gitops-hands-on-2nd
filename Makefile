@@ -25,6 +25,8 @@ manifests:
 	done
 	@if [ -d argocd ]; then echo "== argocd"; \
 	  kubeconform -strict -summary $(SCHEMAS) argocd/*.yaml; fi
+	@if [ -d ops ]; then echo "== ops"; \
+	  kubeconform -strict -summary $(SCHEMAS) ops/*.yaml; fi
 
 actions:
 	@if [ -d .github/workflows ]; then actionlint .github/workflows/*.yml; fi

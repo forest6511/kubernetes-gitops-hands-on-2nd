@@ -1,0 +1,34 @@
+# 第7章: HPA を入れた後の todo-app。第6章までの argocd/todo-app.yaml に、
+# todo-api の replicas を ArgoCD が比較しない設定を足したもの。
+# repoURL の YOUR_GITHUB_USER を自分の GitHub のユーザー名に書き換える
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: todo-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: >-
+      https://github.com/YOUR_GITHUB_USER/kubernetes-gitops-hands-on-2nd.git
+    targetRevision: main
+    path: manifests/overlays/ch06-eks
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: todo-app
+  # #region hpa
+  # todo-api の Pod の数は HPA が決めるので、ArgoCD は比較しない
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      name: todo-api
+      jsonPointers:
+        - /spec/replicas
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    # 比較しない項目は、同期のときも Git の値で上書きしない
+    syncOptions:
+      - RespectIgnoreDifferences=true
+  # #endregion hpa
