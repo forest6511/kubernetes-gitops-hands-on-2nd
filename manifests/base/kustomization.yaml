@@ -22,9 +22,9 @@ images:
   - name: todo-api
     newName: >-
       123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/todo-api
-    newTag: v1.0.0
+    newTag: 9cdfe721c920d862e4e9f891b0ce9ef4b6bfe968
   - name: todo-frontend
     newName: >-
       123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/todo-frontend
-    newTag: v1.0.0
+    newTag: 9cdfe721c920d862e4e9f891b0ce9ef4b6bfe968
 # #endregion images
