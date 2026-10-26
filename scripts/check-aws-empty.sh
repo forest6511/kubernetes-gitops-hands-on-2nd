@@ -32,6 +32,9 @@ check "NAT Gateway" aws ec2 describe-nat-gateways --filter "$TAG" \
   --query 'NatGateways[].NatGatewayId'
 check "Elastic IP" aws ec2 describe-addresses --filters "$TAG" \
   --query 'Addresses[].PublicIp'
+check "PVC から作られた EBS" aws ec2 describe-volumes --filters \
+  "Name=tag:ebs.csi.aws.com/cluster-name,Values=$CLUSTER" \
+  --query 'Volumes[].VolumeId'
 check "どこにも付いていない EBS" aws ec2 describe-volumes \
   --filters Name=status,Values=available --query 'Volumes[].VolumeId'
 check "ALB" aws elbv2 describe-load-balancers \
