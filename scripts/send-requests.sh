@@ -7,7 +7,7 @@ set -u
 URL=${URL:-http://127.0.0.1:8080/api/todos}
 COUNT=${1:-300}
 for i in $(seq "$COUNT"); do
-  # 追加した Todo の id を応答から取り出す（DB が止まっていると空になる）
+  # 追加した Todo の id を取り出す（DB が止まっていると空）
   id=$(curl -s -X POST -H 'Content-Type: application/json' \
     -d "{\"title\":\"request $i\"}" "$URL" |
     sed -n 's/.*"id":\([0-9]*\).*/\1/p')
