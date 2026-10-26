@@ -1,5 +1,6 @@
 # 第2章: app/ を変えて push したら、検査とテストをして、
 # イメージをビルドして ECR に置く
+# #region on
 name: CI
 
 on:
@@ -14,6 +15,7 @@ on:
 
 permissions:
   contents: read
+# #endregion on
 
 # #region env
 env:
