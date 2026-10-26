@@ -1,0 +1,4 @@
+$ kubectl get applications -n argocd
+NAME             SYNC STATUS   HEALTH STATUS
+sealed-secrets   Synced        Healthy
+todo-app         Synced        Healthy

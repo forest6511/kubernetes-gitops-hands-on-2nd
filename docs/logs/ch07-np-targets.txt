@@ -1,3 +1,6 @@
-target todo-api-55b766bdd9-pgb58 up 
-target todo-api-55b766bdd9-d7d8v up 
-target todo-api-55b766bdd9-jx2cl up 
+$ curl -s localhost:9090/api/v1/targets | jq -r \
+    '.data.activeTargets[] | select(.labels.job=="todo-api")
+    | "\(.scrapePool) \(.labels.pod) \(.health)"'
+serviceMonitor/todo-app/todo-api/0 todo-api-55b766bdd9-k2cn9 up
+serviceMonitor/todo-app/todo-api/0 todo-api-55b766bdd9-9b685 up
+serviceMonitor/todo-app/todo-api/0 todo-api-55b766bdd9-s747t up
