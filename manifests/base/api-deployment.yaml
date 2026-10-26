@@ -60,7 +60,7 @@ spec:
               path: /healthz
               port: http
             periodSeconds: 10
-          # liveness はプロセスの応答だけ、readiness は DB への接続まで見る
+          # liveness は応答だけ、readiness は DB の接続まで見る
           readinessProbe:
             httpGet:
               path: /readyz
