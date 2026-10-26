@@ -13,7 +13,7 @@ spec:
       https://github.com/YOUR_GITHUB_USER/kubernetes-gitops-hands-on-2nd.git
     targetRevision: main
     # 第3章の途中で ch03-minikube-sealed、第4章で
-    # ch04-minikube-monitored に変える
+    # ch04-minikube-monitored、第6章で ch06-eks に変える
     path: manifests/overlays/ch01-minikube
   destination:
     server: https://kubernetes.default.svc
