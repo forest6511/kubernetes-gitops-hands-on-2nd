@@ -1,0 +1,9 @@
+# 第1・2章の入口: base に、平文の Secret の見本と
+# Envoy の Gateway を足す
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+components:
+  - ../../components/secret-plain
+  - ../../components/gateway-envoy

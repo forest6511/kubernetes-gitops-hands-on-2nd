@@ -1,0 +1,16 @@
+# yamllint の設定。行の長さは本の紙面に合わせて 72 桁
+extends: default
+ignore: |
+  .githooks/
+rules:
+  line-length:
+    max: 72
+    # uses: owner/repo@<SHA> のように分けて書けない値の行は許す
+    allow-non-breakable-inline-mappings: true
+  document-start: disable
+  truthy:
+    check-keys: false
+  comments:
+    min-spaces-from-content: 1
+  # #region / #endregion の印は本に出ない行なので、字下げを問わない
+  comments-indentation: disable

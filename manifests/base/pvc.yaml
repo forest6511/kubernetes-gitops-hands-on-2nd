@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: todo-db-pvc
+  namespace: todo-app
+spec:
+  accessModes:
+    - ReadWriteOnce
+  # storageClassName を書かず、クラスターの既定を使う
+  # （minikube は standard、EKS は第6章で gp3 にする）
+  resources:
+    requests:
+      storage: 1Gi

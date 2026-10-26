@@ -1,0 +1,30 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - pvc.yaml
+  - api-deployment.yaml
+  - frontend-deployment.yaml
+  - db-deployment.yaml
+  - services.yaml
+  - httproute.yaml
+
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: todo-app
+
+# #region images
+# イメージの置き場（ECR）とタグ。123456789012 を自分の
+# AWS アカウント ID に書き換える。タグは第2章から CI の SHA
+images:
+  - name: todo-api
+    newName: >-
+      123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/todo-api
+    newTag: v1.0.0
+  - name: todo-frontend
+    newName: >-
+      123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/todo-frontend
+    newTag: v1.0.0
+# #endregion images

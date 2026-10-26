@@ -1,0 +1,6 @@
+== todo-api-6c4b59bf45-69tz6
+todo_api_requests_total{method="GET",path="/api/todos",status="200"} 2
+todo_api_requests_total{method="POST",path="/api/todos",status="201"} 1
+== todo-api-6c4b59bf45-7rwbh
+todo_api_requests_total{method="DELETE",path="/api/todos/{id}",status="204"} 1
+todo_api_requests_total{method="PUT",path="/api/todos/{id}",status="200"} 1

@@ -1,0 +1,1 @@
+k8s-gitops-book-monthly	30.0	MONTHLY

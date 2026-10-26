@@ -1,0 +1,9 @@
+# golangci-lint の設定（v2 の形式）。行の長さは本の紙面に合わせて 72 桁（タブは4桁で数える）
+version: "2"
+linters:
+  enable:
+    - lll
+  settings:
+    lll:
+      line-length: 72
+      tab-width: 4

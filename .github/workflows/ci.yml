@@ -1,0 +1,92 @@
+# 第2章: app/ を変えて push したら、検査とテストをして、
+# イメージをビルドして ECR に置く
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "app/**"
+      - ".github/workflows/ci.yml"
+  pull_request:
+    paths:
+      - "app/**"
+
+permissions:
+  contents: read
+
+# #region env
+env:
+  AWS_REGION: ap-northeast-1
+# #endregion env
+
+jobs:
+  # #region test
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      # v7.0.0
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+        with:
+          go-version-file: app/api/go.mod
+      # v9.3.0
+      - uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a
+        with:
+          version: v2.15.0
+          working-directory: app/api
+          args: --config ../../.golangci.yml
+      - name: go test
+        working-directory: app/api
+        run: go test ./...
+  # #endregion test
+
+  # #region build
+  build-and-push:
+    # 検査とテストが通ったときだけ、main への push でだけ動かす
+    needs: test
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # OIDC のトークンを受け取るために要る
+    strategy:
+      matrix:
+        app: [api, frontend]
+    steps:
+      # v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      # v6.3.0
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd
+        with:
+          # 第2章で作る IAM ロールの ARN。公開リポジトリのログは誰でも
+          # 読めるので Secrets に入れ、ログではアカウント ID を伏せる
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+      # v2.1.7
+      - uses: aws-actions/amazon-ecr-login@03f1aad4c6c7ffd436567f42f9384779290529bd
+        id: ecr
+  # #endregion build
+      # #region push
+      - name: イメージの名前を決める（タグはコミットの SHA）
+        id: image
+        env:
+          REGISTRY: ${{ steps.ecr.outputs.registry }}
+          APP: ${{ matrix.app }}
+        run: |
+          ref="${REGISTRY}/todo-${APP}:${GITHUB_SHA}"
+          echo "ref=${ref}" >> "$GITHUB_OUTPUT"
+      # v4.4.1
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069
+      # v7.4.0
+      - uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc
+        with:
+          context: app/${{ matrix.app }}
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.image.outputs.ref }}
+          # 変わっていない層を前回の実行から使い回す
+          cache-from: type=gha,scope=${{ matrix.app }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.app }}
+      # #endregion push

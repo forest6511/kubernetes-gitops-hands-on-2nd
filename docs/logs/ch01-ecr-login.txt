@@ -1,0 +1,2 @@
+namespace/todo-app created
+secret/ecr-login created

@@ -1,0 +1,8 @@
+$ aws iam create-open-id-connect-provider --url https://token.actions.githubusercontent.com --client-id-list sts.amazonaws.com
+arn:aws:iam::123456789012:oidc-provider/token.actions.githubusercontent.com
+$ aws iam create-policy --policy-name todo-ecr-push --policy-document file://aws/iam/ecr-push-policy.json
+arn:aws:iam::123456789012:policy/todo-ecr-push
+$ aws iam create-role --role-name github-actions-ecr-push --assume-role-policy-document file://aws/iam/github-oidc-trust-policy.json
+arn:aws:iam::123456789012:role/github-actions-ecr-push
+$ aws iam attach-role-policy --role-name github-actions-ecr-push --policy-arn arn:aws:iam::123456789012:policy/todo-ecr-push
+(出力なし)

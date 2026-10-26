@@ -1,0 +1,46 @@
+# ポートに名前（http・postgres）を付ける。第4章の ServiceMonitor は
+# この名前で収集先を指す
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-api
+  namespace: todo-app
+  labels:
+    app: todo-api
+spec:
+  selector:
+    app: todo-api
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-frontend
+  namespace: todo-app
+  labels:
+    app: todo-frontend
+spec:
+  selector:
+    app: todo-frontend
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-db
+  namespace: todo-app
+  labels:
+    app: todo-db
+spec:
+  selector:
+    app: todo-db
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: postgres

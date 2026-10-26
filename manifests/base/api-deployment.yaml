@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-api
+  namespace: todo-app
+  labels:
+    app: todo-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: todo-api
+  template:
+    metadata:
+      labels:
+        app: todo-api
+    spec:
+      # #region pod-security
+      # 非 root で動かす（第7章の Pod Security Standards で説明）
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      # 非公開の ECR から取得するための認証（第1章で作る）
+      imagePullSecrets:
+        - name: ecr-login
+      # #endregion pod-security
+      containers:
+        - name: todo-api
+          # #region image
+          # 名前とタグは kustomization.yaml の images で差し替える
+          image: todo-api
+          # #endregion image
+          ports:
+            - name: http
+              containerPort: 8080
+          # #region env
+          env:
+            - name: DB_HOST
+              value: todo-db
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-db-config
+                  key: POSTGRES_DB
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: todo-db-secret
+                  key: POSTGRES_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: todo-db-secret
+                  key: POSTGRES_PASSWORD
+          # #endregion env
+          # #region probes
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 5
+          # requests は第7章の HPA の計算に使う
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          # #endregion probes

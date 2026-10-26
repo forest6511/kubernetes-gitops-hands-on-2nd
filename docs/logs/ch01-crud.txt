@@ -1,0 +1,12 @@
+$ curl -s -X POST -H "Content-Type: application/json" -d '{"title":"牛乳を買う"}' http://127.0.0.1:8080/api/todos
+{"id":1,"title":"牛乳を買う","completed":false,"created_at":"2026-10-26T03:52:50.275764Z"}
+
+$ curl -s -X PUT -H "Content-Type: application/json" -d '{"completed":true}' http://127.0.0.1:8080/api/todos/1
+{"id":1,"title":"牛乳を買う","completed":true,"created_at":"2026-10-26T03:52:50.275764Z"}
+
+$ curl -s http://127.0.0.1:8080/api/todos
+[{"id":1,"title":"牛乳を買う","completed":true,"created_at":"2026-10-26T03:52:50.275764Z"}]
+
+$ curl -s -o /dev/null -w "%{http_code}
+" -X DELETE http://127.0.0.1:8080/api/todos/1
+204

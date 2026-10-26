@@ -1,0 +1,6 @@
+{
+  "BudgetName": "k8s-gitops-book-monthly",
+  "BudgetType": "COST",
+  "TimeUnit": "MONTHLY",
+  "BudgetLimit": { "Amount": "30", "Unit": "USD" }
+}

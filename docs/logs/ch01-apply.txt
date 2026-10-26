@@ -1,0 +1,13 @@
+namespace/todo-app configured
+configmap/todo-db-config created
+secret/todo-db-secret created
+service/todo-api created
+service/todo-db created
+service/todo-frontend created
+persistentvolumeclaim/todo-db-pvc created
+deployment.apps/todo-api created
+deployment.apps/todo-db created
+deployment.apps/todo-frontend created
+gateway.gateway.networking.k8s.io/todo-gateway created
+gatewayclass.gateway.networking.k8s.io/eg created
+httproute.gateway.networking.k8s.io/todo-routes created

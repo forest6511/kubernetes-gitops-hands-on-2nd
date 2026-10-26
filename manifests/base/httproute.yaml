@@ -1,0 +1,21 @@
+# /api は todo-api に、それ以外は todo-frontend に送る。
+# Gateway は環境ごとに components で用意する（minikube は Envoy）
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: todo-routes
+  namespace: todo-app
+spec:
+  parentRefs:
+    - name: todo-gateway
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+      backendRefs:
+        - name: todo-api
+          port: 8080
+    - backendRefs:
+        - name: todo-frontend
+          port: 80
