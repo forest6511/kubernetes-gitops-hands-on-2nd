@@ -1,0 +1,3 @@
+todo-api todo-api-7674c55569-xdgds up
+todo-api todo-api-7674c55569-pjp6t up
+todo-api todo-api-7674c55569-gvch5 up

@@ -1,0 +1,22 @@
+$ ALB=$(kubectl get gateway todo-gateway -n todo-app -o jsonpath='{.status.addresses[0].value}')
+$ curl -s -o /dev/null -w "%{http_code}\n" http://$ALB/
+200
+
+$ curl -s http://$ALB/ | grep "<h1>"
+  <h1>Todo App (GitOps)</h1>
+
+$ curl -s -X POST -H "Content-Type: application/json" -d '{"title":"EKS で動かす"}' http://$ALB/api/todos
+{"id":1,"title":"EKS で動かす","completed":false,"created_at":"2026-10-26T10:14:49.134689Z"}
+
+$ curl -s -X PUT -H "Content-Type: application/json" -d '{"completed":true}' http://$ALB/api/todos/1
+{"id":1,"title":"EKS で動かす","completed":true,"created_at":"2026-10-26T10:14:49.134689Z"}
+
+$ curl -s http://$ALB/api/todos
+[{"id":1,"title":"EKS で動かす","completed":true,"created_at":"2026-10-26T10:14:49.134689Z"}]
+
+$ curl -s -o /dev/null -w "%{http_code}\n" -X DELETE http://$ALB/api/todos/1
+204
+
+$ curl -s http://$ALB/api/todos
+[]
+

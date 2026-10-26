@@ -1,0 +1,4 @@
+$ kubectl get nodes -o custom-columns=NAME:.metadata.name,MAXPODS:.status.allocatable.pods
+NAME                                                 MAXPODS
+ip-192-168-136-205.ap-northeast-1.compute.internal   17
+ip-192-168-170-124.ap-northeast-1.compute.internal   17

@@ -1,0 +1,5 @@
+$ bash scripts/seal-secret.sh
+wrote manifests/components/secret-sealed/sealedsecret.yaml
+$ git diff --stat
+ manifests/components/secret-sealed/sealedsecret.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
