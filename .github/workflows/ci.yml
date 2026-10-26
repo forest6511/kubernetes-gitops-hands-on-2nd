@@ -63,9 +63,11 @@ jobs:
       - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd
         with:
           # 第2章で作る IAM ロールの ARN。公開リポジトリのログは誰でも
-          # 読めるので Secrets に入れ、ログではアカウント ID を伏せる
+          # 読めるので Secrets に入れる
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
+          # ECR の URL に入るアカウント ID も、以降のログで *** にする
+          mask-aws-account-id: true
       # v2.1.7
       - uses: aws-actions/amazon-ecr-login@03f1aad4c6c7ffd436567f42f9384779290529bd
         id: ecr
