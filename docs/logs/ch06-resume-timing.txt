@@ -1,0 +1,11 @@
+# 第6章の再開の手順の時刻（2026-10-26。記録の時刻から）
+20:25:46 1. eksctl create cluster 開始
+20:41:43 1. 完了（約16分）
+20:43:01 2. eksctl scale nodegroup（3台目は約1分で Ready）
+20:45:50 3. LBC の Pod Identity の関連付け
+20:45:59 3. helm install aws-load-balancer-controller
+20:46:44 4. helm install kps
+20:49    6. 封印し直してコミット・push
+20:52:07 8. ALB 経由の追加（id 1）
+20:53    8. Prometheus の Targets で todo-api の3つが up
+# 手順2〜8 で約10分（作成を含めると約27分）

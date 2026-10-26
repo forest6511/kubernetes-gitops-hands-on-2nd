@@ -20,13 +20,39 @@ wait_until_empty() {
   done
   echo "  $name: 0 件（$((SECONDS - start)) 秒）"
 }
-# 途中で中断したクラスターでも流せるように、無いものは飛ばす
-has() { kubectl get "$@" > /dev/null 2>&1; }
+# 途中で中断したクラスターでも流せるように、無いものは飛ばす。
+# 照会そのものに失敗したら（接続できないなど）、無いとは見なさずに止まる
+has() {
+  local out
+  if ! out=$(kubectl get "$@" --ignore-not-found -o name); then
+    echo "kubectl get $* に失敗したので止めます" >&2
+    exit 1
+  fi
+  [ -n "$out" ]
+}
 ARGOCD=https://raw.githubusercontent.com/argoproj/argo-cd/v3.5.6
 ALB_QUERY="LoadBalancers[?starts_with(LoadBalancerName,'k8s-todoapp')]"
+# クラスターの削除の途中で止めた後（ACTIVE でない・もう無い）なら、
+# 6段目だけを行う
+STATUS=$(aws eks describe-cluster --name "$CLUSTER" \
+  --query cluster.status --output text 2> /dev/null || echo NONE)
+if [ "$STATUS" != ACTIVE ]; then
+  echo "クラスターの状態が $STATUS なので、6段目だけを行う"
+  if [ "$STATUS" != NONE ]; then
+    eksctl delete cluster --name "$CLUSTER" --wait
+  fi
+  bash scripts/check-aws-empty.sh
+  exit $?
+fi
+# minikube を向いたまま流すと、minikube の Application や DB を消す
+if ! kubectl config current-context | grep -q "$CLUSTER"; then
+  echo "kubectl の接続先が $CLUSTER ではありません" >&2
+  exit 1
+fi
 # #region steps-1
 echo "1. 作り直す仕組みを止める（自動同期・第7章の ops/）"
-if has application todo-app -n argocd; then
+if has crd applications.argoproj.io &&
+  has application todo-app -n argocd; then
   kubectl patch application todo-app -n argocd --type merge \
     -p '{"spec":{"syncPolicy":null}}'
 fi
