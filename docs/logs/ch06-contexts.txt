@@ -1,5 +1,5 @@
 $ kubectl config get-contexts -o name
-k8s-gitops-book-demo@todo-eks.ap-northeast-1.eksctl.io
+<IAM ユーザー名>@todo-eks.ap-northeast-1.eksctl.io
 minikube
 $ kubectl config current-context
-k8s-gitops-book-demo@todo-eks.ap-northeast-1.eksctl.io
+<IAM ユーザー名>@todo-eks.ap-northeast-1.eksctl.io

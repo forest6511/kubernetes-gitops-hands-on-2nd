@@ -1,0 +1,17 @@
+$ kubectl get applications -n argocd
+NAME             SYNC STATUS   HEALTH STATUS
+sealed-secrets   Synced        Healthy
+todo-app         Synced        Healthy
+
+$ curl -s -X POST -H "Content-Type: application/json" \
+    -d '{"title":"再開した"}' http://$ALB/api/todos
+{"id":1,"title":"再開した","completed":false}
+
+$ curl -s -X PUT -H "Content-Type: application/json" \
+    -d '{"completed":true}' http://$ALB/api/todos/1
+{"id":1,"title":"再開した","completed":true}
+
+$ curl -s -o /dev/null -w "%{http_code}\n" \
+    -X DELETE http://$ALB/api/todos/1
+204
+

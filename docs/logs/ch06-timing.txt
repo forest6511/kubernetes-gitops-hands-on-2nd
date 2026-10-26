@@ -1,3 +1,4 @@
-PVC Bound 7s
-Gateway address 14s
-Synced/Healthy 701s
+# ノード3台で todo-app（path: ch06-eks）を適用してからの経過秒
+PVC Bound 6s
+Gateway address 6s
+Synced/Healthy 130s
