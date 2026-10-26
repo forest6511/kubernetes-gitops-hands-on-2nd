@@ -1,12 +1,18 @@
 $ curl -s -X POST -H "Content-Type: application/json" -d '{"title":"牛乳を買う"}' http://127.0.0.1:8080/api/todos
-{"id":1,"title":"牛乳を買う","completed":false,"created_at":"2026-10-26T03:52:50.275764Z"}
+{"id":1,"title":"牛乳を買う","completed":false,"created_at":"2026-10-26T04:46:56.745356Z"}
 
 $ curl -s -X PUT -H "Content-Type: application/json" -d '{"completed":true}' http://127.0.0.1:8080/api/todos/1
-{"id":1,"title":"牛乳を買う","completed":true,"created_at":"2026-10-26T03:52:50.275764Z"}
+{"id":1,"title":"牛乳を買う","completed":true,"created_at":"2026-10-26T04:46:56.745356Z"}
 
 $ curl -s http://127.0.0.1:8080/api/todos
-[{"id":1,"title":"牛乳を買う","completed":true,"created_at":"2026-10-26T03:52:50.275764Z"}]
+[{"id":1,"title":"牛乳を買う","completed":true,"created_at":"2026-10-26T04:46:56.745356Z"}]
 
-$ curl -s -o /dev/null -w "%{http_code}
-" -X DELETE http://127.0.0.1:8080/api/todos/1
+$ curl -s -o /dev/null -w "%{http_code}\n" -X DELETE http://127.0.0.1:8080/api/todos/1
 204
+
+== pod/todo-api-864f5bf566-mdj2j
+todo_api_requests_total{method="GET",path="/api/todos",status="200"} 1
+todo_api_requests_total{method="PUT",path="/api/todos/{id}",status="200"} 1
+== pod/todo-api-864f5bf566-npshx
+todo_api_requests_total{method="DELETE",path="/api/todos/{id}",status="204"} 1
+todo_api_requests_total{method="POST",path="/api/todos",status="201"} 1
