@@ -1,0 +1,20 @@
+$ bash scripts/cleanup-eks.sh
+1. 作り直す仕組みを止める（自動同期・第7章の ops/）
+2. Gateway を消し、ALB が消えるのを待つ
+  ALB: 0 件（1 秒）
+3. PVC を使っている Pod を止める（DB・監視スタック）
+4. PVC を消し、EBS が消えるのを待つ
+  PVC の EBS: 0 件（13 秒）
+5. controller を消す（Application・ArgoCD・LBC）
+6. クラスターを消す
+eksctl: all cluster resources were deleted
+0 件: EKS クラスター
+0 件: EC2 インスタンス
+0 件: NAT Gateway
+0 件: Elastic IP
+0 件: PVC から作られた EBS
+0 件: どこにも付いていない EBS
+0 件: ALB
+0 件: ターゲットグループ
+0 件: CloudFormation のスタック
+# 開始 19:49:04・終了 20:04:19（約15分。クラスターの削除が約14分）
