@@ -1,0 +1,33 @@
+$ kubectl apply -f ops/rbac.yaml
+serviceaccount/viewer created
+role.rbac.authorization.k8s.io/todo-viewer created
+rolebinding.rbac.authorization.k8s.io/todo-viewer created
+
+$ kubectl auth can-i get pods -n todo-app --as=system:serviceaccount:todo-app:viewer
+yes
+
+$ kubectl auth can-i list deployments -n todo-app --as=system:serviceaccount:todo-app:viewer
+yes
+
+$ kubectl auth can-i delete pods -n todo-app --as=system:serviceaccount:todo-app:viewer
+no
+
+$ kubectl auth can-i get secrets -n todo-app --as=system:serviceaccount:todo-app:viewer
+no
+
+$ kubectl auth can-i get pods -n monitoring --as=system:serviceaccount:todo-app:viewer
+no
+
+$ kubectl get pods -n todo-app --as=system:serviceaccount:todo-app:viewer
+NAME                             READY   STATUS    RESTARTS   AGE
+todo-api-55b766bdd9-d7d8v        1/1     Running   0          108s
+todo-api-55b766bdd9-jx2cl        1/1     Running   0          104s
+todo-api-55b766bdd9-pgb58        1/1     Running   0          106s
+todo-db-7d588cc97b-vsvf6         1/1     Running   0          40m
+todo-frontend-59cc5846fd-fhh5n   1/1     Running   0          108s
+todo-frontend-59cc5846fd-gh9rs   1/1     Running   0          105s
+
+$ kubectl delete pod -n todo-app -l app=todo-frontend --as=system:serviceaccount:todo-app:viewer
+Error from server (Forbidden): pods "todo-frontend-59cc5846fd-fhh5n" is forbidden: User "system:serviceaccount:todo-app:viewer" cannot delete resource "pods" in API group "" in the namespace "todo-app"
+Error from server (Forbidden): pods "todo-frontend-59cc5846fd-gh9rs" is forbidden: User "system:serviceaccount:todo-app:viewer" cannot delete resource "pods" in API group "" in the namespace "todo-app"
+

@@ -1,0 +1,34 @@
+# 第7章: todo-app の Namespace 全体で使える量の上限と、コンテナごとの既定値
+# #region quota
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: todo-app-quota
+  namespace: todo-app
+spec:
+  hard:
+    # HPA の最大（API 8・画面 2・DB 1）が収まる量
+    pods: "15"
+    requests.cpu: "2"
+    requests.memory: 2Gi
+    limits.cpu: "4"
+    limits.memory: 4Gi
+# #endregion quota
+---
+# #region limitrange
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: todo-app-defaults
+  namespace: todo-app
+spec:
+  limits:
+    # requests・limits を書かなかったコンテナに入れる値
+    - type: Container
+      defaultRequest:
+        cpu: 50m
+        memory: 64Mi
+      default:
+        cpu: 200m
+        memory: 256Mi
+# #endregion limitrange

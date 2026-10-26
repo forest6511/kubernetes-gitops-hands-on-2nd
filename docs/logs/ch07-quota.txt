@@ -1,0 +1,13 @@
+$ kubectl apply -f ops/resource-quota.yaml
+resourcequota/todo-app-quota created
+limitrange/todo-app-defaults created
+$ kubectl describe resourcequota todo-app-quota -n todo-app
+Name:            todo-app-quota
+Namespace:       todo-app
+Resource         Used   Hard
+--------         ----   ----
+limits.cpu       1      4
+limits.memory    768Mi  4Gi
+pods             6      15
+requests.cpu     500m   2
+requests.memory  384Mi  2Gi

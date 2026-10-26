@@ -1,0 +1,25 @@
+$ kubectl label namespace todo-app pod-security.kubernetes.io/warn=restricted pod-security.kubernetes.io/audit=restricted
+namespace/todo-app labeled
+
+$ kubectl run pss-test -n todo-app --image=busybox:1.37 --restart=Never -- sleep 3600
+Warning: would violate PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "pss-test" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "pss-test" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "pss-test" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "pss-test" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+pod/pss-test created
+
+$ kubectl delete pod pss-test -n todo-app
+pod "pss-test" deleted from todo-app namespace
+
+$ kubectl label namespace todo-app pod-security.kubernetes.io/enforce=restricted
+namespace/todo-app labeled
+
+$ kubectl run pss-test -n todo-app --image=busybox:1.37 --restart=Never -- sleep 3600
+Error from server (Forbidden): pods "pss-test" is forbidden: violates PodSecurity "restricted:latest": allowPrivilegeEscalation != false (container "pss-test" must set securityContext.allowPrivilegeEscalation=false), unrestricted capabilities (container "pss-test" must set securityContext.capabilities.drop=["ALL"]), runAsNonRoot != true (pod or container "pss-test" must set securityContext.runAsNonRoot=true), seccompProfile (pod or container "pss-test" must set securityContext.seccompProfile.type to "RuntimeDefault" or "Localhost")
+
+$ kubectl get pods -n todo-app
+NAME                             READY   STATUS    RESTARTS   AGE
+todo-api-7674c55569-gvch5        1/1     Running   0          37m
+todo-api-7674c55569-pjp6t        1/1     Running   0          37m
+todo-api-7674c55569-xdgds        1/1     Running   0          37m
+todo-db-7d588cc97b-vsvf6         1/1     Running   0          37m
+todo-frontend-5cb456567b-jk2fd   1/1     Running   0          37m
+todo-frontend-5cb456567b-tbgpn   1/1     Running   0          37m
+

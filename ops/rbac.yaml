@@ -1,0 +1,36 @@
+# 第7章: todo-app の中を読むだけの権限を、ServiceAccount viewer に渡す
+# #region rbac
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: viewer
+  namespace: todo-app
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: todo-viewer
+  namespace: todo-app
+rules:
+  # 読む操作（get・list・watch）だけを許す。Secret は含めない
+  - apiGroups: [""]
+    resources: ["pods", "pods/log", "services", "configmaps"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: todo-viewer
+  namespace: todo-app
+subjects:
+  - kind: ServiceAccount
+    name: viewer
+    namespace: todo-app
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: todo-viewer
+# #endregion rbac
