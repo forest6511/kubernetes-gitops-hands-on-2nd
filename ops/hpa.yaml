@@ -1,0 +1,27 @@
+# 第7章: todo-api の Pod の数を、CPU の使用率に合わせて増減する
+# #region hpa
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: todo-api
+  namespace: todo-app
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: todo-api
+  minReplicas: 3
+  maxReplicas: 8
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          # requests（100m）に対する使用率の平均
+          type: Utilization
+          averageUtilization: 50
+  behavior:
+    scaleDown:
+      # 負荷が下がってから減らすまで待つ時間（既定は 300 秒）
+      stabilizationWindowSeconds: 60
+# #endregion hpa

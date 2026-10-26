@@ -1,0 +1,2 @@
+NAME       REFERENCE             TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+todo-api   Deployment/todo-api   cpu: 1%/50%   3         8         3          21s
