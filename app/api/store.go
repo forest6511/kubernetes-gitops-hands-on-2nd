@@ -22,6 +22,8 @@ type Store interface {
 	Create(ctx context.Context, title string) (Todo, error)
 	Update(ctx context.Context, id int, p Patch) (Todo, error)
 	Delete(ctx context.Context, id int) error
+	// Ready は読み書きできる状態かを返す（readinessProbe の /readyz）
+	Ready(ctx context.Context) error
 }
 
 // Patch は更新する項目。nil の項目は変えない。

@@ -57,6 +57,14 @@ func (s *pgStore) conn() (*sql.DB, error) {
 	return s.db, nil
 }
 
+func (s *pgStore) Ready(ctx context.Context) error {
+	db, err := s.conn()
+	if err != nil {
+		return err
+	}
+	return db.PingContext(ctx)
+}
+
 func (s *pgStore) List(ctx context.Context) ([]Todo, error) {
 	db, err := s.conn()
 	if err != nil {

@@ -13,7 +13,7 @@ import (
 
 // #region routes
 // newMux はルーティングを組み立てる。API の4つだけを計測し、
-// /healthz と /metrics は計測しない。
+// /healthz・/readyz・/metrics は計測しない。
 func newMux(s Store, reg *prometheus.Registry) *http.ServeMux {
 	m := newMetrics(reg)
 	h := &handler{store: s}
@@ -29,6 +29,7 @@ func newMux(s Store, reg *prometheus.Registry) *http.ServeMux {
 		_ *http.Request) {
 		_, _ = w.Write([]byte("ok"))
 	})
+	mux.HandleFunc("GET /readyz", h.ready)
 	mux.Handle("GET /metrics",
 		promhttp.HandlerFor(reg, promhttp.HandlerOpts{}))
 	return mux
@@ -37,6 +38,16 @@ func newMux(s Store, reg *prometheus.Registry) *http.ServeMux {
 // #endregion routes
 
 type handler struct{ store Store }
+
+// ready は DB に接続して読み書きできるときだけ 200 を返す。
+// /healthz はプロセスが応答するかだけを見る（livenessProbe 用）。
+func (h *handler) ready(w http.ResponseWriter, r *http.Request) {
+	if err := h.store.Ready(r.Context()); err != nil {
+		writeErr(w, ErrNotReady)
+		return
+	}
+	_, _ = w.Write([]byte("ok"))
+}
 
 func (h *handler) list(w http.ResponseWriter, r *http.Request) {
 	todos, err := h.store.List(r.Context())

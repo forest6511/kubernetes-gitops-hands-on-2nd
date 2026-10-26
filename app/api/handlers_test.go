@@ -58,6 +58,8 @@ func (s *memStore) Update(
 	return t, nil
 }
 
+func (s *memStore) Ready(context.Context) error { return nil }
+
 func (s *memStore) Delete(_ context.Context, id int) error {
 	if _, ok := s.todos[id]; !ok {
 		return ErrNotFound
@@ -88,12 +90,25 @@ func TestCRUD(t *testing.T) {
 		{"DELETE", "/api/todos/1", "", 204},
 		{"DELETE", "/api/todos/1", "", 404},
 		{"GET", "/healthz", "", 200},
+		{"GET", "/readyz", "", 200},
 	}
 	for _, s := range steps {
 		if got := do(t, mux, s.method, s.path, s.body); got != s.want {
 			t.Errorf("%s %s = %d, want %d",
 				s.method, s.path, got, s.want)
 		}
+	}
+}
+
+// TestReadyz は DB に接続する前の /readyz が 503 を返し、
+// /healthz は 200 のままであることを確かめる。
+func TestReadyz(t *testing.T) {
+	mux := newMux(&pgStore{}, prometheus.NewRegistry())
+	if got := do(t, mux, "GET", "/readyz", ""); got != 503 {
+		t.Errorf("/readyz = %d, want 503", got)
+	}
+	if got := do(t, mux, "GET", "/healthz", ""); got != 200 {
+		t.Errorf("/healthz = %d, want 200", got)
 	}
 }
 
