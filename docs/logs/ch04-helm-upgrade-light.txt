@@ -1,0 +1,7 @@
+$ helm upgrade kps prometheus-community/kube-prometheus-stack --version 92.13.1 -n monitoring -f monitoring/prometheus-values.yaml
+Release "kps" has been upgraded. Happy Helming!
+NAME: kps
+LAST DEPLOYED: Mon Oct 26 15:20:16 2026
+NAMESPACE: monitoring
+STATUS: deployed
+REVISION: 2
