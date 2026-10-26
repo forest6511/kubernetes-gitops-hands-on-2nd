@@ -8,4 +8,9 @@ prometheus:
     ruleSelectorNilUsesHelmValues: false
     # 学習用なので保存期間を短くし、ディスクを節約する
     retention: 2d
+grafana:
+  grafana.ini:
+    users:
+      # 画面を明るい配色にする（既定は dark）
+      default_theme: light
 # #endregion values
