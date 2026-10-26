@@ -1,0 +1,13 @@
+# EKS ではノードの IAM ロールで ECR からイメージを取得するので、
+# minikube 用の認証 Secret（ecr-login）の指定を外す
+# #region patches
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+patches:
+  - target:
+      kind: Deployment
+      name: todo-(api|frontend)
+    patch: |-
+      - op: remove
+        path: /spec/template/spec/imagePullSecrets
+# #endregion patches
