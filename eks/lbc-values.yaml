@@ -1,0 +1,8 @@
+# 第6章: AWS Load Balancer Controller の Helm の values
+# #region values
+clusterName: todo-eks
+region: ap-northeast-1
+serviceAccount:
+  # Pod Identity の関連付けで指定したサービスアカウントの名前と合わせる
+  name: aws-load-balancer-controller
+# #endregion values

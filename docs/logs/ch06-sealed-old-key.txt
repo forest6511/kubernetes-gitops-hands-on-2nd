@@ -1,0 +1,6 @@
+$ kubectl get sealedsecret -n todo-app
+NAME             STATUS                                                           SYNCED   AGE
+todo-db-secret   no key could decrypt secret (POSTGRES_PASSWORD, POSTGRES_USER)   False    8s
+$ kubectl get events -n todo-app --field-selector involvedObject.kind=SealedSecret -o custom-columns=REASON:.reason,MESSAGE:.message
+REASON            MESSAGE
+ErrUnsealFailed   Failed to unseal: no key could decrypt secret (POSTGRES_PASSWORD, POSTGRES_USER)

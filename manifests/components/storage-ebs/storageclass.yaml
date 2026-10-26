@@ -1,0 +1,18 @@
+# EKS で PVC を EBS の gp3 で作る StorageClass。クラスターの既定にするので、
+# storageClassName を書いていない PVC（base の todo-db-pvc）もこれを使う
+# #region sc
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: gp3
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+provisioner: ebs.csi.aws.com
+parameters:
+  type: gp3
+# Pod が置かれるノードの AZ が決まってから EBS を作る
+volumeBindingMode: WaitForFirstConsumer
+# PVC を消すと EBS も消す（消し忘れの課金を防ぐ）
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+# #endregion sc

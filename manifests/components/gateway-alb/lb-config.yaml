@@ -1,0 +1,38 @@
+# ALB とターゲットグループの設定（LBC が定義する CRD）
+# #region lbconfig
+apiVersion: gateway.k8s.aws/v1
+kind: LoadBalancerConfiguration
+metadata:
+  name: todo-alb
+  namespace: todo-app
+spec:
+  # 既定は internal（VPC の中からしか届かない）
+  scheme: internet-facing
+  defaultTargetGroupConfiguration:
+    name: todo-targets
+---
+apiVersion: gateway.k8s.aws/v1
+kind: TargetGroupConfiguration
+metadata:
+  name: todo-targets
+  namespace: todo-app
+spec:
+  defaultConfiguration:
+    # ノードを経由せず、Pod の IP に直接送る（既定は instance）
+    targetType: ip
+# #endregion lbconfig
+# #region api-health
+---
+# ALB のヘルスチェックの既定は / で、API は / に 404 を返す
+apiVersion: gateway.k8s.aws/v1
+kind: TargetGroupConfiguration
+metadata:
+  name: todo-api
+  namespace: todo-app
+spec:
+  targetReference:
+    name: todo-api
+  defaultConfiguration:
+    healthCheckConfig:
+      healthCheckPath: /healthz
+# #endregion api-health
