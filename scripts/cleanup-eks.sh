@@ -52,8 +52,15 @@ if [ "$STATUS" != ACTIVE ]; then
   exit $?
 fi
 # minikube を向いたまま流すと、minikube の Application や DB を消す
+# （eksctl delete cluster は最初に kubeconfig から $CLUSTER を消す。
+#   その後に止めた場合は、作り直してから流し直す）
 if ! kubectl config current-context | grep -q "$CLUSTER"; then
   echo "kubectl の接続先が $CLUSTER ではありません" >&2
+  if ! kubectl config get-contexts -o name | grep -q "$CLUSTER"
+  then
+    msg="aws eks update-kubeconfig --name $CLUSTER で作り直してから、"
+    echo "${msg}もう一度流してください" >&2
+  fi
   exit 1
 fi
 # #region steps-1

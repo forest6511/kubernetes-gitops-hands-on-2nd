@@ -22,6 +22,7 @@ spec:
           averageUtilization: 50
   behavior:
     scaleDown:
-      # 減らすときに、過去何秒の望む数を見るか（既定は 300 秒）
+      # 減らすときは、過去この秒数の望む数のうち最大のものを採る
+      # （既定は 300 秒）
       stabilizationWindowSeconds: 60
 # #endregion hpa
