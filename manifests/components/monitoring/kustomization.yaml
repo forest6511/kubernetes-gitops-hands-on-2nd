@@ -1,0 +1,19 @@
+# 第4章で足す監視の設定: ServiceMonitor・アラートのルール・
+# Grafana のダッシュボード（ConfigMap）
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+resources:
+  - servicemonitor.yaml
+  - prometheusrule.yaml
+# #region dashboard
+configMapGenerator:
+  - name: todo-app-dashboard
+    namespace: todo-app
+    files:
+      - todo-app-dashboard.json
+    options:
+      # Grafana はこのラベルの付いた ConfigMap をダッシュボードとして読む
+      labels:
+        grafana_dashboard: "1"
+      disableNameSuffixHash: true
+# #endregion dashboard

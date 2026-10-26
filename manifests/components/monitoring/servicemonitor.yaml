@@ -1,0 +1,18 @@
+# Prometheus に todo-api の /metrics を収集させる
+# #region sm
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: todo-api
+  namespace: todo-app
+spec:
+  # このラベルの付いた Service を探す
+  selector:
+    matchLabels:
+      app: todo-api
+  endpoints:
+    # Service のポートの名前（第1章で付けた http）で指す
+    - port: http
+      path: /metrics
+      interval: 15s
+# #endregion sm

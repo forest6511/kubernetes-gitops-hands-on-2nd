@@ -1,0 +1,11 @@
+# 第4章: kube-prometheus-stack の values（helm install -f で渡す）
+# #region values
+prometheus:
+  prometheusSpec:
+    # Helm のリリースのラベルが付いていない ServiceMonitor・
+    # PrometheusRule（todo-app の Namespace に置くもの）も対象にする
+    serviceMonitorSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false
+    # 学習用なので保存期間を短くし、ディスクを節約する
+    retention: 2d
+# #endregion values
