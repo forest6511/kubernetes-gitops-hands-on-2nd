@@ -1,0 +1,18 @@
+# DB を 0 にして通信を流している間（アラートの練習の途中）
+$ kubectl get pods -n todo-app -l app=todo-api
+NAME                        READY   STATUS    RESTARTS   AGE
+todo-api-7979f7cfd8-msnll   0/1     Running   0          133m
+todo-api-7979f7cfd8-vgrf9   0/1     Running   0          144m
+todo-api-7979f7cfd8-xkkts   0/1     Running   0          133m
+$ kubectl get endpointslices -n todo-app -l kubernetes.io/service-name=todo-api (ready の状態)
+10.244.0.61 ready=false
+10.244.0.74 ready=false
+10.244.0.75 ready=false
+$ curl -s http://127.0.0.1:8080/api/todos
+{"error":"internal error"}
+
+$ PromQL: sum by (status) (increase(todo_api_requests_total[1m]))
+  {'status': '204'} => 1.3
+  {'status': '200'} => 1.3
+  {'status': '201'} => 1.3
+  {'status': '500'} => 56.4

@@ -1,9 +1,11 @@
 $ kubectl delete applicationset todo-app-envs -n argocd
 applicationset.argoproj.io "todo-app-envs" deleted from argocd namespace
+
+# 約1分後
 $ kubectl get applications -n argocd
-NAME               SYNC STATUS   HEALTH STATUS
-sealed-secrets     Synced        Healthy
-todo-app           Synced        Healthy
-todo-app-dev       OutOfSync     Progressing
-todo-app-prod      OutOfSync     Progressing
-todo-app-staging   OutOfSync     Progressing
+NAME             SYNC STATUS   HEALTH STATUS
+sealed-secrets   Synced        Healthy
+todo-app         Synced        Healthy
+
+$ kubectl get namespaces | grep todo-
+todo-app               Active   4h26m

@@ -1,0 +1,10 @@
+# GET・POST・PUT・DELETE の通信を流した直後。API の Pod は 5xx をまだ1件も返していないので、5xx の割合は結果なし
+$ PromQL: sum by (path) (rate(todo_api_requests_total[5m]))
+  {'path': '/api/todos/{id}'} => 0.428
+  {'path': '/api/todos'} => 0.4172
+
+$ PromQL: sum(rate(todo_api_requests_total{status=~"5.."}[5m])) / sum(rate(todo_api_requests_total[5m]))
+
+$ PromQL: histogram_quantile(0.95, sum by (le) (rate(todo_api_request_duration_seconds_bucket[5m])))
+  {} => 0.0277
+
