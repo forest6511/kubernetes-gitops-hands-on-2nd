@@ -2,7 +2,8 @@ $ kubectl get sealedsecret -n todo-app
 NAME             STATUS   SYNCED   AGE
 todo-db-secret            True     22s
 
-$ kubectl get secret todo-db-secret -n todo-app -o jsonpath=...ownerReferences
+$ kubectl get secret todo-db-secret -n todo-app \
+    -o jsonpath=...ownerReferences
 SealedSecret/todo-db-secret
 
 $ kubectl get pods -n todo-app

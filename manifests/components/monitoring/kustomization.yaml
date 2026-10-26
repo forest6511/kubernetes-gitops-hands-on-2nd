@@ -12,7 +12,7 @@ configMapGenerator:
     files:
       - todo-app-dashboard.json
     options:
-      # Grafana はこのラベルの付いた ConfigMap をダッシュボードとして読む
+      # このラベルの ConfigMap を Grafana が読み込む
       labels:
         grafana_dashboard: "1"
       disableNameSuffixHash: true
