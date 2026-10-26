@@ -1,0 +1,30 @@
+# todo-api のアラートのルール
+# #region rules
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: todo-api
+  namespace: todo-app
+spec:
+  groups:
+    - name: todo-api
+      rules:
+        # 5xx の割合が 10% を超えた状態が 1 分続いた
+        - alert: TodoApiHighErrorRate
+          expr: |
+            sum(rate(todo_api_requests_total{status=~"5.."}[1m]))
+              / sum(rate(todo_api_requests_total[1m])) > 0.1
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "todo-api の 5xx の割合が 10% を超えています"
+        # 収集できる todo-api の Pod が 1 つも無い状態が 1 分続いた
+        - alert: TodoApiDown
+          expr: absent(up{namespace="todo-app", job="todo-api"} == 1)
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "todo-api のメトリクスを収集できません"
+# #endregion rules

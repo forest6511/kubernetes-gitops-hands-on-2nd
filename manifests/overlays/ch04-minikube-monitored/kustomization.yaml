@@ -1,0 +1,9 @@
+# 第4章からの入口: 第3章の入口に、監視の設定を足す（違いは1行）
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+components:
+  - ../../components/secret-sealed
+  - ../../components/gateway-envoy
+  - ../../components/monitoring
