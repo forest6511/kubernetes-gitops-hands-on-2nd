@@ -1,0 +1,9 @@
+NAME: aws-load-balancer-controller
+LAST DEPLOYED: Mon Oct 26 18:57:30 2026
+NAMESPACE: kube-system
+STATUS: deployed
+REVISION: 1
+DESCRIPTION: Install complete
+TEST SUITE: None
+NOTES:
+AWS Load Balancer controller installed!
