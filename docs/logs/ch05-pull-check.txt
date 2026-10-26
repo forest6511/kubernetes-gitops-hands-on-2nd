@@ -1,0 +1,18 @@
+$ kubectl run ecr-pull-check --image-pull-policy=Always --image="$IMAGE"
+pod/ecr-pull-check created
+$ kubectl get pod ecr-pull-check
+NAME             READY   STATUS    RESTARTS   AGE
+ecr-pull-check   1/1     Running   0          2s
+$ kubectl get events \
+    --field-selector involvedObject.name=ecr-pull-check \
+    -o custom-columns=REASON:.reason
+REASON
+Scheduled
+Pulling
+Pulled
+Created
+Started
+$ kubectl get pod ecr-pull-check -o jsonpath='{.spec.imagePullSecrets}'
+（何も表示されない）
+$ kubectl delete pod ecr-pull-check
+pod "ecr-pull-check" deleted from default namespace
