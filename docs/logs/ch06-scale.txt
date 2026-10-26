@@ -1,0 +1,10 @@
+$ eksctl scale nodegroup --cluster todo-eks --name workers --nodes 3 --wait
+[ℹ]  scaling nodegroup "workers" in cluster todo-eks
+[ℹ]  initiated scaling of nodegroup
+[ℹ]  waiting for scaling of nodegroup "workers" to complete
+[ℹ]  nodegroup successfully scaled
+$ kubectl get nodes
+NAME                                                 STATUS   ROLES    AGE    VERSION
+ip-192-168-125-246.ap-northeast-1.compute.internal   Ready    <none>   89s    v1.35.9-eks-39aca56
+ip-192-168-149-87.ap-northeast-1.compute.internal    Ready    <none>   7m4s   v1.35.9-eks-39aca56
+ip-192-168-190-74.ap-northeast-1.compute.internal    Ready    <none>   7m4s   v1.35.9-eks-39aca56

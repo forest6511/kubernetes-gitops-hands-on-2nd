@@ -1,4 +1,5 @@
-# EKS で PVC を EBS の gp3 で作る StorageClass。クラスターの既定にするので、
+# EKS で PVC を EBS の gp3 で作る StorageClass。クラスターの
+# 既定にするので、
 # storageClassName を書いていない PVC（base の todo-db-pvc）もこれを使う
 # #region sc
 apiVersion: storage.k8s.io/v1

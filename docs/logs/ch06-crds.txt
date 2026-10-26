@@ -1,0 +1,14 @@
+$ kubectl get crd | grep -E 'gateway.networking.k8s.io|gateway.k8s.aws'
+backendtlspolicies.gateway.networking.k8s.io    2026-10-26T11:45:52Z
+gatewayclasses.gateway.networking.k8s.io        2026-10-26T11:45:53Z
+gateways.gateway.networking.k8s.io              2026-10-26T11:45:53Z
+grpcroutes.gateway.networking.k8s.io            2026-10-26T11:45:53Z
+httproutes.gateway.networking.k8s.io            2026-10-26T11:45:53Z
+listenerruleconfigurations.gateway.k8s.aws      2026-10-26T11:45:57Z
+listenersets.gateway.networking.k8s.io          2026-10-26T11:45:54Z
+loadbalancerconfigurations.gateway.k8s.aws      2026-10-26T11:45:57Z
+referencegrants.gateway.networking.k8s.io       2026-10-26T11:45:54Z
+targetgroupconfigurations.gateway.k8s.aws       2026-10-26T11:45:57Z
+tcproutes.gateway.networking.k8s.io             2026-10-26T11:45:54Z
+tlsroutes.gateway.networking.k8s.io             2026-10-26T11:45:55Z
+udproutes.gateway.networking.k8s.io             2026-10-26T11:45:55Z

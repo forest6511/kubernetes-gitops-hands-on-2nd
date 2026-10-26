@@ -1,4 +1,5 @@
-# 第7章: HPA を入れた後の todo-app。第6章までの argocd/todo-app.yaml に、
+# 第7章: HPA を入れた後の todo-app。第6章までの
+# argocd/todo-app.yaml に、
 # todo-api の replicas を ArgoCD が比較しない設定を足したもの。
 # repoURL の YOUR_GITHUB_USER を自分の GitHub のユーザー名に書き換える
 apiVersion: argoproj.io/v1alpha1
