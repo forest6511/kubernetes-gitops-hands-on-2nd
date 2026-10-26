@@ -13,4 +13,6 @@ regexes = [
 paths = [
   '''\.gitleaks\.toml''',
   '''(^|/)\.terraform\.lock\.hcl$''',
+  # 第3章の SealedSecret。クラスターの鍵で暗号化した値で、Git に置くためのもの（復号はクラスターの中だけ）
+  '''^manifests/components/secret-sealed/sealedsecret\.yaml$''',
 ]

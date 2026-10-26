@@ -23,6 +23,8 @@ manifests:
 	  echo "== $$o"; \
 	  kubectl kustomize $$o | kubeconform -strict -summary $(SCHEMAS) || exit 1; \
 	done
+	@if [ -d argocd ]; then echo "== argocd"; \
+	  kubeconform -strict -summary $(SCHEMAS) argocd/*.yaml; fi
 
 actions:
 	@if [ -d .github/workflows ]; then actionlint; fi
