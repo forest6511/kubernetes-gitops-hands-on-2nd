@@ -1,0 +1,80 @@
+# 第7章: todo-app の Pod への受信を、必要な経路だけに絞る（送信は絞らない）
+# #region deny
+# まず、todo-app のすべての Pod への受信を止める
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: todo-app
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+# #endregion deny
+---
+# #region frontend
+# ALB → 画面。ALB はパブリックサブネットに置かれるので、その CIDR だけを許す
+# （自分のクラスターの値を aws ec2 describe-subnets で確かめて書き換える）
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend
+  namespace: todo-app
+spec:
+  podSelector:
+    matchLabels:
+      app: todo-frontend
+  ingress:
+    - from:
+        - ipBlock: { cidr: 192.168.0.0/19 }
+        - ipBlock: { cidr: 192.168.32.0/19 }
+        - ipBlock: { cidr: 192.168.64.0/19 }
+      ports:
+        - port: 8080
+# #endregion frontend
+---
+# #region api
+# ALB → API（/api は ALB から直接届く）と、Prometheus → API（/metrics の収集）
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-api
+  namespace: todo-app
+spec:
+  podSelector:
+    matchLabels:
+      app: todo-api
+  ingress:
+    - from:
+        - ipBlock: { cidr: 192.168.0.0/19 }
+        - ipBlock: { cidr: 192.168.32.0/19 }
+        - ipBlock: { cidr: 192.168.64.0/19 }
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: monitoring
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: prometheus
+      ports:
+        - port: 8080
+# #endregion api
+---
+# #region db
+# API → DB だけ
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-db
+  namespace: todo-app
+spec:
+  podSelector:
+    matchLabels:
+      app: todo-db
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: todo-api
+      ports:
+        - port: 5432
+# #endregion db

@@ -1,0 +1,6 @@
+$ kubectl delete -n todo-app pod/todo-frontend-5cb456567b-jk2fd
+pod "todo-frontend-5cb456567b-jk2fd" deleted from todo-app namespace
+$ kubectl get pods -n todo-app -l app=todo-frontend
+NAME                             READY   STATUS    RESTARTS   AGE
+todo-frontend-5cb456567b-rgmmz   1/1     Running   0          2s
+todo-frontend-5cb456567b-tbgpn   1/1     Running   0          38m

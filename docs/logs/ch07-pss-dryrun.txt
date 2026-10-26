@@ -1,0 +1,2 @@
+$ kubectl label --dry-run=server --overwrite namespace todo-app pod-security.kubernetes.io/enforce=restricted
+namespace/todo-app labeled (server dry run)

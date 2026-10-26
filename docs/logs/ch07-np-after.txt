@@ -1,0 +1,8 @@
+== ip-192-168-116-150 から
+wget: download timed out
+api: 届かない
+db:  届かない
+== ip-192-168-170-124 から
+wget: download timed out
+api: 届かない
+db:  届かない
