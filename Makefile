@@ -27,7 +27,7 @@ manifests:
 	  kubeconform -strict -summary $(SCHEMAS) argocd/*.yaml; fi
 
 actions:
-	@if [ -d .github/workflows ]; then actionlint; fi
+	@if [ -d .github/workflows ]; then actionlint .github/workflows/*.yml; fi
 
 shell:
 	shellcheck scripts/*.sh
