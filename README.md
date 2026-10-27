@@ -7,6 +7,8 @@
 
 Kindle 版: [Kubernetes実践ハンズオン](https://www.amazon.co.jp/dp/B0D33JTNFF)
 
+ペーパーバック版: [Kubernetes実践ハンズオン](https://www.amazon.co.jp/dp/B0GVT1XLLN)
+
 ## 料金について
 
 > [!CAUTION]
